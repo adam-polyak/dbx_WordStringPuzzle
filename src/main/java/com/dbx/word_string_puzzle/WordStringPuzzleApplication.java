@@ -16,15 +16,16 @@ public class WordStringPuzzleApplication {
         //List<String> inputWordList = obtainInputWords();
         //buildWordStringGraph(inputWordList);
 
-        String word1 = "kutyáska";
-        String word2 = "kutyussal";
+        String word1 = "kutyus";
+        String word2 = "kutyás";
 
-        int distance = WordGraph.calculateLevenshteinDistance(word1, word2);
-        System.out.println("Levenshtein distance between " + word1 + " and " + word2 + " is: " + distance);
+        Boolean neighboor = WordGraph.areWordsAdjacent(word1, word2);
+        System.out.println("these words: " + word1 + " and " + word2 + " are" + (neighboor ? " " : " NOT ") + "neighboors.");
 
     }
 
     private static List<String> obtainInputWords() {
+        // TODO error check
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Please provide the word list separated by one space character: ");
