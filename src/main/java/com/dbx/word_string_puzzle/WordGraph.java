@@ -1,9 +1,7 @@
 package com.dbx.word_string_puzzle;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -43,22 +41,10 @@ class Graph
             int src = edge.source;
             int dest = edge.dest;
 
-
-//            adjList.get(getElementByName(adjList, src)).add(dest);
-//            adjList.get(getElementByName(adjList, dest)).add(src);
-
             adjList.get(src).add(dest);
             adjList.get(dest).add(src);
         }
     }
-
-    /*private ArrayList<Integer> getElementByName(List<List<Integer>> adjList, String name) {
-        for(int i = 0; i < adjList.size(); i++) {
-            if (((String)adjList.get(i)).equals(name)) {
-                return i;
-            }
-        }
-    }*/
 }
 
 
@@ -67,19 +53,19 @@ class Graph
  * @author Ádám Polyák <adam.polyak.email at gmail.com>
  * */
 public class WordGraph {
-    private static final Boolean debugPrint = false;
-
-
-
+    private static final Boolean debugPrint = true;
 
     public static void hamiltonianPaths(Graph graph, int v, boolean[] visited,
-                                        List<Integer> path, int n)
+                                        List<Integer> path, int n, List<List<Integer>> resultList)
+
     {
         // if all the vertices are visited, then the Hamiltonian path exists
         if (path.size() == n)
         {
             // print the Hamiltonian path
-            System.out.println(path);
+            if(debugPrint) System.out.println(path);
+            List<Integer> newPath = new ArrayList<Integer>(path);
+            resultList.add(newPath);
             return;
         }
 
@@ -96,7 +82,7 @@ public class WordGraph {
 
                 // check if adding vertex `w` to the path leads
                 // to the solution or not
-                hamiltonianPaths(graph, w, visited, path, n);
+                hamiltonianPaths(graph, w, visited, path, n, resultList);
 
                 // backtrack
                 visited[w] = false;
@@ -105,8 +91,9 @@ public class WordGraph {
         }
     }
 
-    public static void findHamiltonianPaths(Graph graph, int n)
+    public static List<List<Integer>> findHamiltonianPaths(Graph graph, int n)
     {
+        List<List<Integer>> resultDoubleList = new ArrayList<>();
         // start with every node
         for (int start = 0; start < n; start++)
         {
@@ -118,39 +105,40 @@ public class WordGraph {
             boolean[] visited = new boolean[n];
             visited[start] = true;
 
-            hamiltonianPaths(graph, start, visited, path, n);
+            hamiltonianPaths(graph, start, visited, path, n, resultDoubleList);
         }
+
+        return resultDoubleList;
     }
 
-    public static void mainn(List<String> args)
+    public static void mainn(List<String> nodes)
     {
         List<Edge> edges = new ArrayList<Edge>();
-        for (int i = 0; i < args.size(); i++) {
-            for (int j = 0; j < args.size(); j++) {
-                if(i == j) {
-                    continue;
-                }
-                boolean isAdjacent = areWordsAdjacent(args.get(i), args.get(j));
+        for (int i = 0; i < nodes.size(); i++) {
+            for (int j = 0; j < i; j++) {
+                boolean isAdjacent = areWordsAdjacent(nodes.get(i), nodes.get(j));
                 if (isAdjacent) {
                     edges.add(new Edge(i, j));
                 }
             }
         }
 
-
         // total number of nodes in the graph (labelled from 0 to 3)
-        int n = args.size();
+        int n = nodes.size();
 
         // build a graph from the given edges
         Graph graph = new Graph(edges, n);
+        List<List<Integer>> resultList = findHamiltonianPaths(graph, n);
 
-        findHamiltonianPaths(graph, n);
+        if(debugPrint) System.out.println("resultList:\n" + resultList);
+        List<Integer> firstResult = new ArrayList<>();
+        if(!resultList.isEmpty()) {
+            firstResult = resultList.get(0);
+        }
+        for (int i = 0; i < firstResult.size(); i++) {
+            System.out.print(nodes.get(firstResult.get(i)) + " ");
+        }
     }
-
-
-
-
-
 
     /**
      * Returns if two words are adjacent so they can be joined one after another.
@@ -200,14 +188,14 @@ public class WordGraph {
             for (int j = 1; j <= n; j++) {
                 int distance = (word1.charAt(i - 1) == word2.charAt(j - 1)) ? 0 : 1;
                 matrix[i][j] = Math.min(Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1), matrix[i - 1][j - 1] + distance);
-                if (debugPrint) System.out.print(matrix[i][j] + "\t");
+                //if (debugPrint) System.out.print(matrix[i][j] + "\t");
 
                 // check if execution is limited and return if the distance is already greater than 2
                 if (limited && matrix[i][j] < minDistance) {
                     minDistance = matrix[i][j];
                 }
             }
-            if (debugPrint) System.out.println();
+            //if (debugPrint) System.out.println();
             if (limited && minDistance >= 2) {
                 return 2;
             }
