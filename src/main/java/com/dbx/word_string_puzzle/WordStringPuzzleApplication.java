@@ -13,9 +13,14 @@ public class WordStringPuzzleApplication {
     public static void main(String[] args) {
         SpringApplication.run(WordStringPuzzleApplication.class, args);
 
-        List<String> inputWordList = obtainInputWords();
-
+        //List<String> inputWordList = obtainInputWords();
         //buildWordStringGraph(inputWordList);
+
+        String word1 = "kutyáska";
+        String word2 = "kutyussal";
+
+        int distance = WordGraph.calculateLevenshteinDistance(word1, word2);
+        System.out.println("Levenshtein distance between " + word1 + " and " + word2 + " is: " + distance);
 
     }
 
