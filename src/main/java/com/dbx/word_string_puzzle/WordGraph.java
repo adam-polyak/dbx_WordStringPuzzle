@@ -1,26 +1,40 @@
 package com.dbx.word_string_puzzle;
 
+/**
+ * Graph related classes and methods<br>
+ * @author Ádám Polyák <adam.polyak.email at gmail.com>
+ * */
 public class WordGraph {
     private static final Boolean debugPrint = false;
 
+
+    /**
+     * Returns if two words are adjacent so they can be joined one after another.
+     * @param word1   first word
+     * @param word2   second word
+     * @return true if the words are adjacent, false otherwise
+     * */
     public static Boolean areWordsAdjacent(String word1, String word2) {
         return (calculateLevenshteinDistance(word1, word2, true) <= 1);
     }
 
-
     /**
      * Levenshtein distance is the number of the single-character differences between two words (insertion, deletion or
-     * substitution differences).
-     * It is the general form of Hamming distance, but able to compare words with different lengths.
+     * substitution differences).<br>
+     * It is the general form of Hamming distance, but able to compare words with different lengths.<br>
      * The Limited parameter is able to limit the calculation up to maximum 2 differences, if there is no need for
-     * bigger values, so we can save a nice bunch of computing resources.
+     * bigger values, so we can save a nice bunch of computing resources.<br>
      *
      * @param word1   first word
      * @param word2   second word
      * @param limited limits the calculation up to maximum 2 differences
      * @return the Levenshtein distance between the two strings (maximum 2 if limited is true)
+     * @see <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a>
+     * @see <a href="https://www.baeldung.com/java-levenshtein-distance">Levenshtein Distance in Java using Dynamic
+     * Programming</a>
      */
-    public static int calculateLevenshteinDistance(String word1, String word2, Boolean limited) {
+    private static int calculateLevenshteinDistance(String word1, String word2, Boolean limited) {
         int minDistance;
         int m = word1.length();
         int n = word2.length();
@@ -61,12 +75,16 @@ public class WordGraph {
 
     /**
      * Levenshtein distance is the number of the single-character differences between two words (insertion, deletion or
-     * substitution differences).
-     * It is the general form of Hamming distance, but able to compare words with different lengths.
+     * substitution differences).<br>
+     * It is the general form of Hamming distance, but able to compare words with different lengths.<br>
      *
      * @param word1   first word
      * @param word2   second word
      * @return the Levenshtein distance between the two strings
+     * @see <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a>
+     * @see <a href="https://www.baeldung.com/java-levenshtein-distance">Levenshtein Distance in Java using Dynamic
+     * Programming</a>
      */
     private static int calculateLevenshteinDistance(String word1, String word2) {
         return calculateLevenshteinDistance(word1, word2, false);
