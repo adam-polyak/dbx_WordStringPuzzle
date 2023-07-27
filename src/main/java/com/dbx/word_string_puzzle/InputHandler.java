@@ -12,6 +12,7 @@ import java.util.Scanner;
  * @author Ádám Polyák <adam.polyak.email at gmail.com>
  * */
 public class InputHandler {
+    private static final Boolean debugPrint = false;
 
     /**
      * obtain the input words
@@ -20,12 +21,14 @@ public class InputHandler {
     public static List<String> obtainInputWords() {
         Scanner scanner = chooseScannerSource();
         String scannedLine = scanner.nextLine();
-        System.out.println("Scanned line: " + scannedLine);
+        if(debugPrint) System.out.println("Scanned line: " + scannedLine);
 
         List<String> wordList = new ArrayList<>(Arrays.asList(scannedLine.split("\\s")));
-        System.out.println("Scanned words (" + wordList.size() + " piece(s)):");
-        for(String word : wordList) {
-            System.out.println(word);
+        if(debugPrint) {
+            System.out.println("Scanned words (" + wordList.size() + " piece(s)):");
+            for(String word : wordList) {
+                System.out.println(word);
+            }
         }
 
         return wordList;

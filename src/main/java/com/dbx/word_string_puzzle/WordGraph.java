@@ -24,7 +24,7 @@ class Edge
 class Graph
 {
     // A list of lists to represent an adjacency list
-    List<List<Integer>> adjList = null;
+    List<List<Integer>> adjList;
 
     // Constructor
     Graph(List<Edge> edges, int n)
@@ -51,12 +51,13 @@ class Graph
 /**
  * Graph related classes and methods<br>
  * @author Ádám Polyák <adam.polyak.email at gmail.com>
+ * @see <a href="https://www.techiedelight.com/print-all-hamiltonian-path-present-in-a-graph/">Hamiltonian paths</a>
  * */
 public class WordGraph {
-    private static final Boolean debugPrint = true;
+    private static final Boolean debugPrint = false;
 
     public static void hamiltonianPaths(Graph graph, int v, boolean[] visited,
-                                        List<Integer> path, int n, List<List<Integer>> resultList)
+                                        List<Integer> path, int n, List<List<Integer>> listOfResults)
 
     {
         // if all the vertices are visited, then the Hamiltonian path exists
@@ -64,8 +65,8 @@ public class WordGraph {
         {
             // print the Hamiltonian path
             if(debugPrint) System.out.println(path);
-            List<Integer> newPath = new ArrayList<Integer>(path);
-            resultList.add(newPath);
+            List<Integer> clonedPath = new ArrayList<>(path);
+            listOfResults.add(clonedPath);
             return;
         }
 
@@ -82,7 +83,7 @@ public class WordGraph {
 
                 // check if adding vertex `w` to the path leads
                 // to the solution or not
-                hamiltonianPaths(graph, w, visited, path, n, resultList);
+                hamiltonianPaths(graph, w, visited, path, n, listOfResults);
 
                 // backtrack
                 visited[w] = false;
@@ -93,7 +94,7 @@ public class WordGraph {
 
     public static List<List<Integer>> findHamiltonianPaths(Graph graph, int n)
     {
-        List<List<Integer>> resultDoubleList = new ArrayList<>();
+        List<List<Integer>> listOfResults = new ArrayList<>();
         // start with every node
         for (int start = 0; start < n; start++)
         {
@@ -105,15 +106,15 @@ public class WordGraph {
             boolean[] visited = new boolean[n];
             visited[start] = true;
 
-            hamiltonianPaths(graph, start, visited, path, n, resultDoubleList);
+            hamiltonianPaths(graph, start, visited, path, n, listOfResults);
         }
 
-        return resultDoubleList;
+        return listOfResults;
     }
 
-    public static void mainn(List<String> nodes)
+    public static List<List<Integer>> seekingForHamiltonPaths(List<String> nodes)
     {
-        List<Edge> edges = new ArrayList<Edge>();
+        List<Edge> edges = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
             for (int j = 0; j < i; j++) {
                 boolean isAdjacent = areWordsAdjacent(nodes.get(i), nodes.get(j));
@@ -128,16 +129,8 @@ public class WordGraph {
 
         // build a graph from the given edges
         Graph graph = new Graph(edges, n);
-        List<List<Integer>> resultList = findHamiltonianPaths(graph, n);
-
-        if(debugPrint) System.out.println("resultList:\n" + resultList);
-        List<Integer> firstResult = new ArrayList<>();
-        if(!resultList.isEmpty()) {
-            firstResult = resultList.get(0);
-        }
-        for (int i = 0; i < firstResult.size(); i++) {
-            System.out.print(nodes.get(firstResult.get(i)) + " ");
-        }
+        List<List<Integer>> listOfResults = findHamiltonianPaths(graph, n);
+        return listOfResults;
     }
 
     /**
